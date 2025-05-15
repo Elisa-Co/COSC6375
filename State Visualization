@@ -1,0 +1,39 @@
+import geopandas as gpd
+import matplotlib.pyplot as plt
+import matplotlib.patches as mp
+
+# Load US counties shapefile from the Census
+url = "https://www2.census.gov/geo/tiger/GENZ2022/shp/cb_2022_us_county_5m.zip"
+counties = gpd.read_file(url)
+
+# Filter Texas counties (State FIPS code '48')
+texas_counties = counties[counties['STATEFP'] == '48'].copy()
+
+# Define counties to highlight.
+green_counties = ['Polk', 'Karnes', 'Randall']
+red_county = 'El Paso'
+
+# Add a new column for color based on county name
+def get_color(name):
+    if name in green_counties:
+        return 'green'
+    elif name == red_county:
+        return 'red'
+    else:
+        return 'lightgray'
+
+texas_counties['color'] = texas_counties['NAME'].apply(get_color)
+
+# Plot
+fig, ax = plt.subplots(figsize=(10, 10))
+texas_counties.plot(ax=ax, edgecolor='black', color=texas_counties['color'])
+ax.set_title("Texas Counties Map", fontsize=16)
+ax.axis('off')
+
+#create legend
+green= mp.Patch(color='green', label='Good Air Quality')
+red= mp.Patch(color='red', label='Hazardous Air Quality')
+
+plt.legend(handles=[green, red], loc='upper right')
+
+plt.show()
