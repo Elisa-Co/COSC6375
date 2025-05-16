@@ -5,10 +5,11 @@ from tabulate import tabulate
 
 df=pd.read_csv(file)
 
-#need to find column indexes and their names.
+#find column indexes and their names.
 column_names=df.columns.tolist() #use to get column index and names
 print(column_names)
 
+#filters dataframe to include only Texas counties and 'good' air quality
 df=df[(df['State Name'].str.contains('Texas')) & (df['Category']=='Good')] #filters dataframe to include only Texas counties and "Good" air quality
 
 #change county name to just county
@@ -17,7 +18,7 @@ df.rename(columns={'county Name':'County'}, inplace=True)
 #get counts of how many times each county has 'Good' AQI.
 df= df.County.value_counts().reset_index(name='Count')
 
-#Because the above orders values from most to least, we can use head(3) to find the 3 counties with most "Good" AQI
+#can use head(3) to find the 3 counties with most "Good" AQI
 Top3=df.head(3)
 
 Results=Top3[['County', 'Count']]
