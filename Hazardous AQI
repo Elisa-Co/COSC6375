@@ -3,10 +3,12 @@ file=open("daily_aqi_by_county_2024.csv", "r")
 import pandas as pd
 from tabulate import tabulate
 
+#read and filter data to include only Texas counties with AQI of 'Hazardous'
 df=pd.read_csv(file)
 df=df[(df['State Name'].str.contains('Texas')) & (df['Category'] == 'Hazardous')]
-Resulting=df[['county Name', 'Category', 'Date', 'AQI']]
 
+#output only the needed columns 
+Resulting=df[['county Name', 'Category', 'Date', 'AQI']]
 headers=['Row', 'County Name', 'Category', 'Date', 'AQI']
 print(tabulate(Resulting, headers=headers, tablefmt='psql'))
 
